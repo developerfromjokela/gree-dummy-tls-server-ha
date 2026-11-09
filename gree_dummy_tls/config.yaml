@@ -1,0 +1,25 @@
+name: "Gree Dummy TLS Server"
+version: "1.0.0"
+slug: "gree_dummy_tls"
+description: "Local stand-in for the Gree cloud so AC units work with internet access blocked"
+url: "https://github.com/YOURUSER/ha-addons"
+arch:
+  - amd64
+  - aarch64
+startup: services
+boot: auto
+init: false
+ports:
+  1813/tcp: 1813
+  5000/tcp: 5000
+ports_description:
+  1813/tcp: "TLS connections from Gree units"
+  5000/tcp: "Plain TCP connections from Gree units"
+options:
+  domain_name: "gree.example.com"
+  external_ip: "192.168.1.50"
+  log_level: "INFO"
+schema:
+  domain_name: str
+  external_ip: str
+  log_level: list(DEBUG|INFO|WARNING|ERROR|CRITICAL)
