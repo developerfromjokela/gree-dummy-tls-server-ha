@@ -240,11 +240,18 @@ async def main():
         os.getenv("LISTEN_ADDR", "0.0.0.0"),
         int(os.getenv("LISTEN_PORT_TCP", "5000"))
     )
+    server_tcp_2 = await asyncio.start_server(
+        handle_connection,
+        os.getenv("LISTEN_ADDR", "0.0.0.0"),
+        int(os.getenv("LISTEN_PORT_TCP_2", "1812"))
+    )
 
     addrs = ", ".join(str(sock.getsockname()) for sock in server_tls.sockets)
     LOGGER.info(f"Listening for tls on {addrs}")
     addrs = ", ".join(str(sock.getsockname()) for sock in server_tcp.sockets)
     LOGGER.info(f"Listening for tcp on {addrs}")
+    addrs = ", ".join(str(sock.getsockname()) for sock in server_tcp_2.sockets)
+    LOGGER.info(f"Listening for tcp2 on {addrs}")
 
     prometheus_port = os.getenv("LISTEN_PORT_PROMETHEUS")
     if prometheus_port is not None:
@@ -256,13 +263,14 @@ async def main():
 
     loop = asyncio.get_running_loop()
     for sig in [signal.SIGINT, signal.SIGTERM]:
-        loop.add_signal_handler(sig, lambda: asyncio.create_task(shutdown([server_tcp, server_tls], prometheus, sig)))
+        loop.add_signal_handler(sig, lambda: asyncio.create_task(shutdown([server_tcp, server_tls, server_tcp_2], prometheus, sig)))
 
-    async with server_tls, server_tcp:
+    async with server_tls, server_tcp, server_tcp_2:
         try:
             await asyncio.gather(
                 server_tls.serve_forever(),
-                server_tcp.serve_forever()
+                server_tcp.serve_forever(),
+                server_tcp_2.serve_forever()
             )
         except asyncio.CancelledError:
             pass
