@@ -2,7 +2,7 @@ name: "Gree Dummy TLS Server"
 version: "1.0.0"
 slug: "gree_dummy_tls"
 description: "Local stand-in for the Gree cloud so AC units work with internet access blocked"
-url: "https://github.com/YOURUSER/ha-addons"
+url: "https://github.com/developerfromjokela/gree-dummy-tls-server-ha"
 arch:
   - amd64
   - aarch64
