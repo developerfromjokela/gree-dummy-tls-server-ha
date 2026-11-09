@@ -12,9 +12,11 @@ init: false
 ports:
   1813/tcp: 1813
   5000/tcp: 5000
+  1812/tcp: 1812
 ports_description:
   1813/tcp: "TLS connections from Gree units"
   5000/tcp: "Plain TCP connections from Gree units"
+  1812/tcp: "Second plain TCP connections from Gree units"
 options:
   domain_name: "gree.example.com"
   external_ip: "192.168.1.50"
